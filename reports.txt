@@ -1,0 +1,55 @@
+REPORT.XML
+
+<?xml version="1.0""encoding=utf-8"?>
+<odoo>
+    <data>
+	<report
+	   id="action_report_saleorder_xlsx"
+string="Quotation / Order XLSX
+model="sale.order"
+report_type="xlsx"
+file="sale.report_custom_saleorder_xlsx"
+name="sale.report_custom_saleorder_xlsx"
+print_report_name="(object.state in ('draft', 'sent') and 'Quotation - %s' % (object.name)) or 'Order - %s' % (object.name)"
+/>
+</data>
+</odoo>
+
+------------------------------------------------------------------
+
+MANIFEST
+'depends': 'report_xlsx'
+'data':
+'reports/report.xml
+
+-----------------------------------------------------------------
+
+__init__.py
+from . import models
+from . import reports
+
+-----------------------------------------------------------------
+
+SALE_XLXS_REPORT.PY
+from odoo import models, fields, api, _
+
+class SalesXlsxReport(models.AbstractModel):
+     _name = 'report.od_sale_custom.report_saleorder_xlsx
+     _inherit = 'report.report_xlsx.abstract'
+
+     _def generate_xlsx_report(self, workbook, data, orders):
+	for order in orders:
+	   sheet = workbook.add_worksheet("Report")
+	   bold = workbook.add_format({"bold": True})
+	   sheet.write(0, 0, order.name, bold) 
+
+-------------------------------------------------------------------
+
+NAME OF FOLDERS
+>od_sale_custom
+  >models
+  >reports
+     __init__.py
+     report.xml
+     sale_xlsx_report.py
+  >views
